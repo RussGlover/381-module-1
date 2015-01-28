@@ -31,18 +31,13 @@ void Screen_Clear () {
 }
 
 void Draw_Background(colour) {
-	int x,y;
-	for(y=0; y < 240 ; y++) {
-		for(x=0; x < 320 ; x++){
-			IOWR_32DIRECT(drawer_base,0,x); // Set x1
-			IOWR_32DIRECT(drawer_base,4,y); // Set y1
-			IOWR_32DIRECT(drawer_base,8,x); // Set x2
-			IOWR_32DIRECT(drawer_base,12,y); // Set y2
-			IOWR_32DIRECT(drawer_base,16,colour);  // Set colour
-			IOWR_32DIRECT(drawer_base,20,1);  // Start drawing
-			while(IORD_32DIRECT(drawer_base,20)==0); // wait until done
-		}
-	}
+		IOWR_32DIRECT(drawer_base,0,0); // Set x1
+		IOWR_32DIRECT(drawer_base,4,0); // Set y1
+		IOWR_32DIRECT(drawer_base,8,320); // Set x2
+		IOWR_32DIRECT(drawer_base,12,240); // Set y2
+		IOWR_32DIRECT(drawer_base,16,colour);  // Set colour
+		IOWR_32DIRECT(drawer_base,20,1);  // Start drawing
+		while(IORD_32DIRECT(drawer_base,20)==0); // wait until done
 }
 
 void Draw_Menu () {
@@ -87,16 +82,16 @@ void Draw_Axis (int colour) {
 	alt_up_char_buffer_string(char_buffer, "15", 66, 54);
 	alt_up_char_buffer_string(char_buffer, "16", 70, 54);
 
-	alt_up_char_buffer_string(char_buffer, "1", 8, 47);
-	alt_up_char_buffer_string(char_buffer, "2", 8, 42);
-	alt_up_char_buffer_string(char_buffer, "3", 8, 37);
-	alt_up_char_buffer_string(char_buffer, "4", 8, 32);
-	alt_up_char_buffer_string(char_buffer, "5", 8, 27);
-	alt_up_char_buffer_string(char_buffer, "6", 8, 22);
-	alt_up_char_buffer_string(char_buffer, "7", 8, 17);
-	alt_up_char_buffer_string(char_buffer, "8", 8, 12);
-	alt_up_char_buffer_string(char_buffer, "9", 8, 7);
-	alt_up_char_buffer_string(char_buffer, "10", 8, 2);
+	alt_up_char_buffer_string(char_buffer, "25", 8, 47);
+	alt_up_char_buffer_string(char_buffer, "50", 8, 42);
+	alt_up_char_buffer_string(char_buffer, "75", 8, 37);
+	alt_up_char_buffer_string(char_buffer, "100", 7, 32);
+	alt_up_char_buffer_string(char_buffer, "125", 7, 27);
+	alt_up_char_buffer_string(char_buffer, "150", 7, 22);
+	alt_up_char_buffer_string(char_buffer, "175", 7, 17);
+	alt_up_char_buffer_string(char_buffer, "200", 7, 12);
+	alt_up_char_buffer_string(char_buffer, "225", 7, 7);
+	alt_up_char_buffer_string(char_buffer, "250", 7, 2);
 
 
 
@@ -138,5 +133,15 @@ void Draw_Axis (int colour) {
 		IOWR_32DIRECT(drawer_base,20,1);
 		while(IORD_32DIRECT(drawer_base,20)==0);
 	}
-
+}
+void Display_Data(short int data[]){
+	Draw_Background(Blue);//change colour
+	Draw_Axis(Yellow);//change colour
+	int i;
+	short int height;
+	double scale=0.8;
+	for (i=0; i<=15;i++){
+		height=(short int)(data[i]*scale);
+		Draw_Bars(i,height,Green); //change the colour
+	}
 }
