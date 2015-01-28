@@ -15,5 +15,6 @@ void Draw_Arrow (int y);
 void Draw_Bars (int x,int height,int colour);
 void Draw_Axis (int colour);
 void Draw_Background(int colour);
+void Display_Data (short int data[]);
 
 #endif /* SCREEN_H_ */
