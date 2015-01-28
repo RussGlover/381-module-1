@@ -48,7 +48,7 @@ void Draw_Background(colour) {
 void Draw_Menu () {
 
 		alt_up_char_buffer_string(char_buffer, "*Read Data from SD Card*", 30, 25);
-		alt_up_char_buffer_string(char_buffer, "*Analyze the Data*", 30, 30);
+		alt_up_char_buffer_string(char_buffer, "*Analyse the Data*", 30, 30);
 		alt_up_char_buffer_string(char_buffer, "*Store Data onto SD Card*", 30, 35);
 
 

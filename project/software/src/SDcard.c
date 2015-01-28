@@ -190,10 +190,6 @@ void sdcard_WriteFile(int write_data [], short int file_handle)
 		result = alt_up_sd_card_write(file_handle, temp);
 		byte_index++;
 	}
-	alt_up_sd_card_write(file_handle, '/r');
-	alt_up_sd_card_write(file_handle, '/n');
-	alt_up_sd_card_write(file_handle, '/0');
-
 }
 
 /* Return: File attributes. -1 if invalid file.
