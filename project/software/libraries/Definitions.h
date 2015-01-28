@@ -23,9 +23,9 @@
 #include <stdbool.h>
 
 
-#define switches   (volatile char*)   0x00004030
-#define leds       (volatile char*)   0x00004020
-#define pushbutton (volatile char*)   0x00004000
+#define switchAddress   (volatile char*)   0x00004870
+#define ledAddress       (volatile char*)   0x00004860
+#define keyAddress (volatile char*)   0x00004840
 
 //screen
 //alt_up_pixel_buffer_dma_dev *pixel_buffer;
@@ -58,6 +58,7 @@
 #define Background		0x0000       //black
 
 //sdcard
+
 
 
 
