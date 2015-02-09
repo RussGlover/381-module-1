@@ -8,10 +8,15 @@
 #ifndef DEFINITIONS_H_
 #define DEFINITIONS_H_
 
+
+
 //libraries
 #include <altera_up_avalon_video_pixel_buffer_dma.h>
 #include <altera_up_avalon_video_character_buffer_with_dma.h>
 #include <Altera_UP_SD_Card_Avalon_Interface.h>
+#include <altera_avalon_pio_regs.h>
+#include <altera_up_avalon_audio.h>
+#include <altera_up_avalon_audio_and_video_config.h>
 
 #include <io.h>
 #include <stdlib.h>
@@ -21,6 +26,7 @@
 #include <unistd.h>
 #include <time.h>
 #include <stdbool.h>
+#include <sys/alt_alarm.h>
 
 
 #define switchAddress   (volatile char*)   0x00004870

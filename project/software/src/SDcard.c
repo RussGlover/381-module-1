@@ -1,6 +1,6 @@
 
-#include <../Module1/Definitions.h>
-#include <../Module1/SDcard.h>
+#include <../audio_core_test/Definitions.h>
+#include <../audio_core_test/SDcard.h>
 
 alt_up_sd_card_dev *device_reference = NULL;
 void sdcard_Init(void)
@@ -119,10 +119,10 @@ int sdcard_FileSize(short int file_handle)
 /*
  * Reads file into a int buffer
  */
-void sdcard_ReadFile(int read_data[], short int file_handle)
+void sdcard_ReadFile(short int read_data[], short int file_handle)
 {
 	short int byte = 0;
-	int val=0;
+	short int val=0;
 	int size = 0;
 	char string[10];
 	int string_index;
@@ -130,9 +130,11 @@ void sdcard_ReadFile(int read_data[], short int file_handle)
 		string_index = 0;
 		while(1){
 			byte = sdcard_ReadByte(file_handle);
-			if(byte >=47 &&byte <= 58){
+			if(byte <= -1){
+				return;
+			}
+			else if(byte >=47 &&byte <= 58){
 				string[string_index] =(char)(((int)'0')+byte-48);
-				printf("%s",string);
 				string_index ++;
 			}
 			else {
@@ -165,7 +167,7 @@ void sdcard_ReadFile(int read_data[], short int file_handle)
 /*
  *	Debug method for printing char buffer
  */
-void printArray(int a[])
+void printArray(short int a[])
 {
 	printf("Print array called \n");
 	int h = 0;
@@ -179,7 +181,7 @@ void printArray(int a[])
  *	Writes char buffer to file
  *	Stops when end of file character '/' detected
  */
-void sdcard_WriteFile(int write_data [], short int file_handle)
+void sdcard_WriteFile(short int write_data [], short int file_handle)
 {
 	int byte_index = 0;
 	bool result;

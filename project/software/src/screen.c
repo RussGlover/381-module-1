@@ -4,8 +4,9 @@
  *  Created on: 2015-01-27
  *      Author: Allen
  */
-#include <../Module1/Definitions.h>
-#include <../Module1/Screen.h>
+#include <../audio_core_test/Definitions.h>
+#include <../audio_core_test/Screen.h>
+int pre_height [16] ;
 
 //screen
 alt_up_pixel_buffer_dma_dev *pixel_buffer;
@@ -15,19 +16,23 @@ void Screen_Init () {
 	pixel_buffer = alt_up_pixel_buffer_dma_open_dev("/dev/video_pixel_buffer_dma_0");
 	char_buffer = alt_up_char_buffer_open_dev("/dev/video_character_buffer_with_dma_0");
 	alt_up_char_buffer_init(char_buffer);
-	// Set the background buffer address – Although we don’t use the background,
-	// they only provide a function to change the background buffer address, so
-	// we must set that, and then swap it to the foreground.
-	alt_up_pixel_buffer_dma_change_back_buffer_address(pixel_buffer,
-	PIXEL_BUFFER_BASE);
-	// Swap background and foreground buffers
+	alt_up_pixel_buffer_dma_change_back_buffer_address(pixel_buffer,PIXEL_BUFFER_BASE);
+	// Swap buffers – we have to swap because there is only an API function
+	// to set the address of the background buffer.
 	alt_up_pixel_buffer_dma_swap_buffers(pixel_buffer);
-	// Wait for the swap to complete
+	while
+	(alt_up_pixel_buffer_dma_check_swap_buffers_status(pixel_buffer));
+	// Set the 2nd buffer address
 	alt_up_pixel_buffer_dma_clear_screen(pixel_buffer, 0);
+	alt_up_char_buffer_clear(char_buffer);
 }
 
 void Screen_Clear () {
 	alt_up_pixel_buffer_dma_clear_screen(pixel_buffer, 0);
+	alt_up_char_buffer_clear(char_buffer);
+}
+void Char_Clearonly(){
+	alt_up_char_buffer_clear(char_buffer);
 }
 
 void Draw_Background(colour) {
@@ -41,28 +46,56 @@ void Draw_Background(colour) {
 }
 
 void Draw_Menu () {
-
 		alt_up_char_buffer_string(char_buffer, "*Read Data from SD Card*", 30, 25);
 		alt_up_char_buffer_string(char_buffer, "*Analyse the Data*", 30, 30);
 		alt_up_char_buffer_string(char_buffer, "*Store Data onto SD Card*", 30, 35);
-
-
+}
+void Draw_Read(){
+	alt_up_char_buffer_string(char_buffer, "Read Data Mode Is Detected", 30, 30);
+	alt_up_char_buffer_string(char_buffer, "Start Reading Data Form SD Card", 30, 35);
+}
+void Draw_Write(){
+	alt_up_char_buffer_string(char_buffer, "Write Data Mode Is Detected", 30, 30);
+	alt_up_char_buffer_string(char_buffer, "Start Writing Data Onto SD Card", 30, 35);
 }
 
-void Draw_Arrow (int y){  //Y could be 25, 30, 35
-	alt_up_char_buffer_string(char_buffer, "->", 27, y);
-
-}
-void Draw_Bars (int bar_num,int height,int colour){ //x indicate the number of the bar, which is 0,1,2,3,etc    height is selected from 0-209
-	int n = 42+15*bar_num;
-	IOWR_32DIRECT(drawer_base,0,n);
-	IOWR_32DIRECT(drawer_base,4,209-height);
-	IOWR_32DIRECT(drawer_base,8,n+13);
-	IOWR_32DIRECT(drawer_base,12,209);
-	IOWR_32DIRECT(drawer_base,16,colour);
+void Draw_Arrow (int y){  //Y could be 1,2,3,4 which means it points the 1st,2nd,3rd or 4th item on menu
+	int amplitude=20*y+80;
+	IOWR_32DIRECT(drawer_base,0,27*4);
+	IOWR_32DIRECT(drawer_base,4,amplitude);
+	IOWR_32DIRECT(drawer_base,8,28*4);
+	IOWR_32DIRECT(drawer_base,12,amplitude);
+	IOWR_32DIRECT(drawer_base,16,White);
 	IOWR_32DIRECT(drawer_base,20,1);
-	while(IORD_32DIRECT(drawer_base,20)==0);
+
+	IOWR_32DIRECT(drawer_base,0,28*4-2);
+	IOWR_32DIRECT(drawer_base,4,amplitude-1);
+	IOWR_32DIRECT(drawer_base,8,28*4-1);
+	IOWR_32DIRECT(drawer_base,12,amplitude-1);
+	IOWR_32DIRECT(drawer_base,16,White);
+	IOWR_32DIRECT(drawer_base,20,1);
+
+	IOWR_32DIRECT(drawer_base,0,28*4-2);
+	IOWR_32DIRECT(drawer_base,4,amplitude+1);
+	IOWR_32DIRECT(drawer_base,8,28*4-1);
+	IOWR_32DIRECT(drawer_base,12,amplitude+1);
+	IOWR_32DIRECT(drawer_base,16,White);
+	IOWR_32DIRECT(drawer_base,20,1);
+
 }
+
+
+void Clear_Arrows(){
+	IOWR_32DIRECT(drawer_base,0,27*4); // Set x1
+	IOWR_32DIRECT(drawer_base,4,24*4); // Set y1
+	IOWR_32DIRECT(drawer_base,8,29*4); // Set x2
+	IOWR_32DIRECT(drawer_base,12,36*4); // Set y2
+	IOWR_32DIRECT(drawer_base,16,Black);  // Set colour
+	IOWR_32DIRECT(drawer_base,20,1);  // Start drawing
+	while(IORD_32DIRECT(drawer_base,20)==0); // wait until done
+
+}
+
 void Draw_Axis (int colour) {
 	alt_up_char_buffer_string(char_buffer, "0", 9, 53);//x-axis
 	alt_up_char_buffer_string(char_buffer, "1", 13, 54);
@@ -135,13 +168,35 @@ void Draw_Axis (int colour) {
 	}
 }
 void Display_Data(short int data[]){
-	Draw_Background(Blue);//change colour
-	Draw_Axis(Yellow);//change colour
+
 	int i;
 	short int height;
 	double scale=0.8;
 	for (i=0; i<=15;i++){
 		height=(short int)(data[i]*scale);
-		Draw_Bars(i,height,Green); //change the colour
+		Draw_Bars(i,height,Green,pre_height); //change the colour
+		pre_height[i] = height;
 	}
+}
+void Draw_Bars (int bar_num,int height,int colour,int pre_height[]){ //x indicate the number of the bar, which is 0,1,2,3,etc    height is selected from 0-209
+	int n = 42+15*bar_num;
+	if (pre_height[bar_num] < height){
+		IOWR_32DIRECT(drawer_base,0,n);
+		IOWR_32DIRECT(drawer_base,4,209 - pre_height[bar_num]);
+		IOWR_32DIRECT(drawer_base,8,n+13);
+		IOWR_32DIRECT(drawer_base,12,209 - height);
+		IOWR_32DIRECT(drawer_base,16,colour);
+		IOWR_32DIRECT(drawer_base,20,1);
+		while(IORD_32DIRECT(drawer_base,20)==0);
+	}
+	else {
+		IOWR_32DIRECT(drawer_base,0,n);
+		IOWR_32DIRECT(drawer_base,4,209-height);
+		IOWR_32DIRECT(drawer_base,8,n+13);
+		IOWR_32DIRECT(drawer_base,12,209-pre_height[bar_num]);
+		IOWR_32DIRECT(drawer_base,16,Blue);     //cover with background colour
+		IOWR_32DIRECT(drawer_base,20,1);
+		while(IORD_32DIRECT(drawer_base,20)==0);
+	}
+
 }
