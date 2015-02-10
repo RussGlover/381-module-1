@@ -11,6 +11,12 @@ int pre_height [16] ;
 //screen
 alt_up_pixel_buffer_dma_dev *pixel_buffer;
 alt_up_char_buffer_dev *char_buffer;
+
+/*
+ * initialize the screen
+ * open the char buffer device and pixel buffer device
+ */
+
 void Screen_Init () {
 	// Use the name of your pixel buffer DMA core
 	pixel_buffer = alt_up_pixel_buffer_dma_open_dev("/dev/video_pixel_buffer_dma_0");
@@ -27,14 +33,26 @@ void Screen_Init () {
 	alt_up_char_buffer_clear(char_buffer);
 }
 
+/*
+ * clear the both char buffer and pixel buffer on the screen
+ *
+ */
 void Screen_Clear () {
 	alt_up_pixel_buffer_dma_clear_screen(pixel_buffer, 0);
 	alt_up_char_buffer_clear(char_buffer);
 }
+
+
+/*
+ * clear the char buffer only on the screen
+ */
 void Char_Clearonly(){
 	alt_up_char_buffer_clear(char_buffer);
 }
 
+/*
+ * Take the colour parameter and draw the backgound to that colour
+ */
 void Draw_Background(colour) {
 		IOWR_32DIRECT(drawer_base,0,0); // Set x1
 		IOWR_32DIRECT(drawer_base,4,0); // Set y1
@@ -45,20 +63,35 @@ void Draw_Background(colour) {
 		while(IORD_32DIRECT(drawer_base,20)==0); // wait until done
 }
 
+/*
+ * draw the user menu
+ */
 void Draw_Menu () {
 		alt_up_char_buffer_string(char_buffer, "*Read Data from SD Card*", 30, 25);
 		alt_up_char_buffer_string(char_buffer, "*Analyse the Data*", 30, 30);
 		alt_up_char_buffer_string(char_buffer, "*Store Data onto SD Card*", 30, 35);
 }
+
+/*
+ * draw read from sd card menu
+ */
 void Draw_Read(){
 	alt_up_char_buffer_string(char_buffer, "Read Data Mode Is Detected", 30, 30);
 	alt_up_char_buffer_string(char_buffer, "Start Reading Data Form SD Card", 30, 35);
 }
+
+/*
+ * draw write to sd card meno
+ */
 void Draw_Write(){
 	alt_up_char_buffer_string(char_buffer, "Write Data Mode Is Detected", 30, 30);
 	alt_up_char_buffer_string(char_buffer, "Start Writing Data Onto SD Card", 30, 35);
 }
 
+
+/*
+ * draw cursor on the screen
+ */
 void Draw_Arrow (int y){  //Y could be 1,2,3,4 which means it points the 1st,2nd,3rd or 4th item on menu
 	int amplitude=20*y+80;
 	IOWR_32DIRECT(drawer_base,0,27*4);
@@ -84,7 +117,10 @@ void Draw_Arrow (int y){  //Y could be 1,2,3,4 which means it points the 1st,2nd
 
 }
 
-
+/*
+ * clear the cursor
+ *
+ */
 void Clear_Arrows(){
 	IOWR_32DIRECT(drawer_base,0,27*4); // Set x1
 	IOWR_32DIRECT(drawer_base,4,24*4); // Set y1
@@ -96,6 +132,10 @@ void Clear_Arrows(){
 
 }
 
+
+/*
+ * draw the axis for the histogram
+ */
 void Draw_Axis (int colour) {
 	alt_up_char_buffer_string(char_buffer, "0", 9, 53);//x-axis
 	alt_up_char_buffer_string(char_buffer, "1", 13, 54);
@@ -167,6 +207,12 @@ void Draw_Axis (int colour) {
 		while(IORD_32DIRECT(drawer_base,20)==0);
 	}
 }
+
+
+/*
+ * Take the input of 16 elements array
+ * draw 16 blocks on the histogram
+ */
 void Display_Data(short int data[]){
 
 	int i;
@@ -178,6 +224,10 @@ void Display_Data(short int data[]){
 		pre_height[i] = height;
 	}
 }
+
+/*
+ * draw single bar on the screen depends on the color and x coordinates and height parameter
+ */
 void Draw_Bars (int bar_num,int height,int colour,int pre_height[]){ //x indicate the number of the bar, which is 0,1,2,3,etc    height is selected from 0-209
 	int n = 42+15*bar_num;
 	if (pre_height[bar_num] < height){

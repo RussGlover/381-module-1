@@ -10,10 +10,15 @@ int main()
 	}
 
 	//audio test
-	 unsigned int  l_buf;
-	   l_buf = (unsigned int ) malloc(1024*sizeof(unsigned int));
+	/*
+	 unsigned int  r_buf;
+	   r_buf = (unsigned int ) malloc(1024*sizeof(unsigned int));
 	audio_Init ();
-	audio_Read(l_buf);
+	audio_Read();
+	free(&r_buf);
+	/*
+
+
 /*
 	int i=0;
 	for(i=0;i<1024;i++){
@@ -123,7 +128,7 @@ int main()
 
 
 	//run test
-	/*
+
 	long keychanges;
 	int arrow_number =1;
 	int i;
@@ -145,7 +150,7 @@ int main()
 			 if (arrow_number == 1){
 				 Clear_Arrows();
 				 Draw_Arrow(arrow_number);
-				 handle = alt_up_sd_card_fopen("ab/hi5.txt",false);
+				 handle = alt_up_sd_card_fopen("ab/hi5.txt",true);
 				 while(keychanges){
 					 	 if (reset1){
 					 		Clear_Arrows();
@@ -223,7 +228,7 @@ int main()
 
 
 	}
-	*/
+
 
 
 

@@ -3,6 +3,12 @@
 #include <../audio_core_test/SDcard.h>
 
 alt_up_sd_card_dev *device_reference = NULL;
+
+
+/**
+ * initialize the sdcard device
+ * ouput shows if the card is connected correctly
+ */
 void sdcard_Init(void)
 {
 	//alt_up_sd_card_dev *device_reference = NULL;
@@ -24,7 +30,6 @@ void sdcard_Init(void)
 				}
 
 }
-
 
 /**
  * Looks for an SD Card
@@ -117,7 +122,7 @@ int sdcard_FileSize(short int file_handle)
 }
 
 /*
- * Reads file into a int buffer
+ * Reads file into a short int array
  */
 void sdcard_ReadFile(short int read_data[], short int file_handle)
 {
@@ -165,7 +170,7 @@ void sdcard_ReadFile(short int read_data[], short int file_handle)
 }
 */
 /*
- *	Debug method for printing char buffer
+ *	Debug method for printing array
  */
 void printArray(short int a[])
 {
