@@ -2,10 +2,11 @@
  * Audio.c
  *
  *  Created on: 2015-02-08
- *      Author: Allen
+ *      Author: Tao Liu
  */
-#include <../audio_core_test/Definitions.h>
-#include <../audio_core_test/Screen.h>
+//#include <../audio_core_test/Definitions.h>
+#include <../audio_core_test/Audio.h>
+
 
 alt_up_audio_dev * audio_dev;
 
@@ -84,23 +85,28 @@ void audio_Readtobuffer (unsigned int r_buf[]) {
  * Read input data from microphone and store 16 elements to an array buffer
  * used for provide data for screen
  */
-void audio_Readtoscreen (unsigned int buffer[]) {
+void audio_Readtoscreen (unsigned int buffer[], short int temp[]) {
 	int count =0;
 	while(count<16)
 	{
-		unsigned int temp=0;
+		unsigned int right=0;
 		int fifospace = alt_up_audio_read_fifo_avail (audio_dev, ALT_UP_AUDIO_RIGHT);
 		if ( fifospace > 0 ) // check if data is available
 		{
 			// read audio buffer
-			alt_up_audio_read_fifo (audio_dev, &(temp), 1, ALT_UP_AUDIO_RIGHT);
-			if(temp>300 && temp < 60000)
+			alt_up_audio_read_fifo (audio_dev, &(right), 1, ALT_UP_AUDIO_RIGHT);
+			if(right>0 && right < 5000)
 			{
-				printf("%u \t",temp);
-				buffer[count] = temp;
+				printf("%u \t",right);
+				buffer[count] = right;
 				count++;
 			}
 		}
+	}
+	int x=0;
+	int scale = 19;
+	for(x=0;x<=15;x++){
+		temp[x] =(short int) (buffer[x]/scale);
 	}
 }
 

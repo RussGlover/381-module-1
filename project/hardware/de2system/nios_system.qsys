@@ -204,6 +204,14 @@
          type = "String";
       }
    }
+   element sdram.s1
+   {
+      datum baseAddress
+      {
+         value = "16777216";
+         type = "String";
+      }
+   }
    element onchip_memory2_0.s1
    {
       datum _lockedAddress
@@ -217,11 +225,11 @@
          type = "String";
       }
    }
-   element timer_0.s1
+   element LEDs.s1
    {
       datum baseAddress
       {
-         value = "20736";
+         value = "18528";
          type = "String";
       }
    }
@@ -233,19 +241,11 @@
          type = "String";
       }
    }
-   element sdram.s1
+   element timer_0.s1
    {
       datum baseAddress
       {
-         value = "16777216";
-         type = "String";
-      }
-   }
-   element LEDs.s1
-   {
-      datum baseAddress
-      {
-         value = "18528";
+         value = "20736";
          type = "String";
       }
    }
@@ -360,7 +360,7 @@
  <parameter name="projectName" value="lights.qpf" />
  <parameter name="sopcBorderPoints" value="false" />
  <parameter name="systemHash" value="1" />
- <parameter name="timeStamp" value="1423597424397" />
+ <parameter name="timeStamp" value="1423658015605" />
  <parameter name="useTestBenchNamingPattern" value="false" />
  <instanceScript></instanceScript>
  <interface name="clk" internal="clk_0.clk_in" type="clock" dir="end" />

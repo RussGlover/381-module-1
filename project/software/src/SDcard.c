@@ -1,6 +1,13 @@
+/*
+ * tests.c
+ *
+ *  Created on: 2015-01-26
+ *      Author: Tao Liu
+ */
 
-#include <../audio_core_test/Definitions.h>
+
 #include <../audio_core_test/SDcard.h>
+#include <stdio.h>
 
 alt_up_sd_card_dev *device_reference = NULL;
 

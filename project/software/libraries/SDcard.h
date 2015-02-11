@@ -2,12 +2,21 @@
  * SDcard.h
  *
  *  Created on: 2015-01-26
- *      Author: Allen
+ *      Author: Tao Liu
  */
 
 #ifndef SDCARD_H_
 #define SDCARD_H_
-#include <../audio_core_test/Definitions.h>
+#include <Altera_UP_SD_Card_Avalon_Interface.h>
+#include <io.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include "system.h"
+#include <math.h>
+#include <unistd.h>
+#include <time.h>
+#include <stdbool.h>
+#include <sys/alt_alarm.h>
 
 
 void sdcard_Init(void);

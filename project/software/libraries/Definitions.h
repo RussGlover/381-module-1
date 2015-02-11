@@ -2,12 +2,25 @@
  * Definitions.h
  *
  *  Created on: 2015-01-26
- *      Author: Allen
+ *      Author: Tao Liu
  */
 
 #ifndef DEFINITIONS_H_
 #define DEFINITIONS_H_
 
+//universal variables
+int state = 1;
+char keys;
+char switches;
+int arrow = 2;
+short int temp[16];
+int i;
+
+//Audio
+unsigned buffer_16[16];
+
+//Video
+short int pre_height[16] ;
 
 
 //libraries
@@ -60,10 +73,38 @@
 #define White           0xFFFF      /* 255, 255, 255 */
 #define Orange          0xFD20      /* 255, 165,   0 */
 #define GreenYellow     0xAFE5      /* 173, 255,  47 */
-
 #define Background		0x0000       //black
 
-//sdcard
+//keys&pushbuttons numbers
+int Key3 = 3;
+int Key2 =	5;
+int Key1 =	6;
+int Switch0	= 1;
+int Switch1	= 2;
+int Switch2	= 4;
+
+//user menu
+
+int reset1 = 1;
+int reset2 = 1;
+int reset3 = 1;
+int reset4_1 = 1;
+int reset4_2 = 1;
+int reset5_1 = 1;
+int reset5_2 = 1;
+int reset6 = 1;
+int reset7 = 1;
+int reset8 = 1;
+
+
+int first = 2;
+int second = 3;
+int third = 4;
+
+
+//SD card
+int handle = 0;
+
 
 
 

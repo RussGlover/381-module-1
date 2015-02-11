@@ -1,253 +1,215 @@
+/*
+ * tests.c
+ *
+ *  Created on: 2015-01-28
+ *      Author: Tao Liu
+ */
 
 #include <../audio_core_test/headers.h>
-//#include <sys/alt_alarm.h>
 int main()
 {
-	int pre_height [16] ;
-	int w=0;
-	for (w=0; w<=15;w++){
-		pre_height[w] = 0;
-	}
 
-	//audio test
-	/*
-	 unsigned int  r_buf;
-	   r_buf = (unsigned int ) malloc(1024*sizeof(unsigned int));
-	audio_Init ();
-	audio_Read();
-	free(&r_buf);
-	/*
-
-
-/*
-	int i=0;
-	for(i=0;i<1024;i++){
-		printf("%u \t", l_buf[i]);
-	}
-*/
-
-
-
-
-	// sdcard test
-	//sdcard_Init();
-	//int temp[16];
-	//short int handle=0;
-
-
-	//handle = alt_up_sd_card_fopen("ab/hi.txt",false);
-	//sdcard_ReadFile(temp,  handle);
-	//printArray(temp);
-	//sdcard_ReadFile(temp,  handle);
-	//printArray(temp);
-	//sdcard_ReadFile(temp,  handle);
-	//sdcard_ListFiles("ab/.");
-	//sdcard_ReadFile(temp,fp.file_handle);
-	//printArray(temp);
-	//sdcard_fclose(handle);
-
-/*
-    int i =0;
-    for(i=0;i<=15;i++){
-    	temp[i] = 1;
-    }
-	handle = alt_up_sd_card_fopen("ab/hi1.txt",true);
-	printf("SD Accessed Successfully, writing data...");
-	sdcard_WriteFile(temp,handle);
-	printf("Done!\n");
-	printf("Closing File...");
-	sdcard_fclose(handle);
-	printf("Done!\n");
-*/
-
-
-	//screen test
-
-
-
-	//Screen_Init();
-/*
-	Draw_Background (Navy);
-	Draw_Axis (Red);
-	Draw_Bars(0,50,Green);
-	Draw_Bars(1,70,Yellow);
-	Draw_Bars(2,90,White);
-	Draw_Bars(3,100,Purple);
-	Draw_Bars(4,110,Olive);
-	Draw_Bars(5,120,DarkGrey);
-	Draw_Bars(6,130,Cyan);
-	Draw_Bars(7,140,Orange);
-
-	Draw_Menu();
-	Draw_Arrow(1);
-	Screen_Clear();
-	*/
-
-
-
-	/*
-	int x=0;
-	short int test[15];
-	for (x=0;x<=15;x++){
-		test[x]=random_double();
-	}
-	Display_Data(test);
-
-
-	 Screen_Clear();
-	 x=0;
-	 	for (x=0;x<=15;x++){
-	 		test[x]=random_double();
-	 	}
-	 Display_Data(test);
-
-	*/
-
-
-
-//switch
-
-/*
-   long PBchanges;
-   int i;
-
- *switchAddress = 0; //clear out any changes so far
- while (1)
-   {
-      PBchanges = *switchAddress;
-      // Display the state of the change register on green LEDs
-      *ledAddress = PBchanges;
-      if(PBchanges)
-      {
-         // Delay, so that we can observe the change on the LEDs
-         for (i=0; i<1000000;i++);
-         *switchAddress = 0; //reset the changes for next round
-      }
-   }
-   */
-
-
-	//run test
-
-	long keychanges;
-	int arrow_number =1;
-	int i;
-	//int x=0;
-	//short int test[15];
-	int handle = 0;
-	short int temp[16];
-	Screen_Init();
+	//state machine
+	screen_Init();
 	sdcard_Init();
-	Draw_Background(Black);
-	Draw_Menu ();
-	Draw_Arrow(arrow_number);
+	audio_Init ();
+
+	int w=0;
+		for (w=0; w<=15;w++){
+			pre_height[w] = 0;
+		}
+
 	while (1){
-		int reset1 = 1;
-		int reset2 = 1;
-		int reset3 = 1;
+		switch(state) {
+			case 1:
+				if(reset1 == 1){
+					screen_Clear();
+					draw_Menu1();
+					draw_Arrow(2);
+					reset1 = 0;
+				}
+				keys = IORD_8DIRECT(keyAddress,0);
+				switches = IORD_8DIRECT(switchAddress,0);
+				if (keys == Key3 && arrow == first){
+					clear_Arrows();
+					draw_Arrow(3);
+					arrow = second;
+				}
+				if (keys == Key2 && arrow == second){
+					clear_Arrows();
+					draw_Arrow(2);
+					arrow = first;
+				}
+				if (arrow == first && switches == Switch0){
+					state = 2;
+					reset1 = 1;
+					for (i=0; i<200000;i++);
+				}
+				if (arrow == second && switches == Switch0){
+					state = 3;
+					reset1 = 1;
+					for (i=0; i<200000;i++);
+				}
 
-		 keychanges = *switchAddress;
-			 if (arrow_number == 1){
-				 Clear_Arrows();
-				 Draw_Arrow(arrow_number);
-				 handle = alt_up_sd_card_fopen("ab/hi5.txt",true);
-				 while(keychanges){
-					 	 if (reset1){
-					 		Clear_Arrows();
-					 		Char_Clearonly();
-					 		Draw_Write();
-					 		reset1 = 0;
-					 	 }
-				 		sdcard_WriteFile(temp,  handle);
-				 		printArray(temp);
-				 		for (i=0; i<70000;i++);
-				 		keychanges = 0;
-				 		keychanges = *switchAddress;
-				 		if (!keychanges){
-				 			Draw_Background(Black);
-				 			Draw_Menu ();
-				 		}
-				 }
-				 sdcard_fclose(handle);
-				 arrow_number +=1;
-			 }
-			 else if(arrow_number == 2){
-				 Clear_Arrows();
-				 Draw_Arrow(arrow_number);
-				 handle = alt_up_sd_card_fopen("ab/hi.txt",false);
-				 while(keychanges){
-					 if (reset2){
-					 		Clear_Arrows();
-					 		Char_Clearonly();
-					 		Draw_Read();
-					 		reset2 = 0;
-					 }
-				 		sdcard_ReadFile(temp,  handle);
-				 		printArray(temp);
-				 		for (i=0; i<70000;i++);
-				 		keychanges = 0;
-				 		keychanges = *switchAddress;
-				 		if (!keychanges){
-				 				Draw_Background(Black);
-				 				Draw_Menu ();
-				 		}
-				 }
-				 sdcard_fclose(handle);
-				 arrow_number +=1;
-			 }
-			 else{
-				 Clear_Arrows();
-				 Draw_Arrow(arrow_number);
-				 handle = alt_up_sd_card_fopen("ab/hi.txt",false);
+			break;
 
-				 while(keychanges){
-						sdcard_ReadFile(temp,  handle);
-						if (reset3 ){
-							Char_Clearonly();
-							Draw_Background(Blue);
-							Draw_Axis(Yellow);
-							reset3 = 0;
-						}
-						Display_Data(temp);
-						for (i=0; i<5000;i++);
-						keychanges = 0;
-						keychanges = *switchAddress;
-						if (!keychanges){
-								Char_Clearonly();
-								Draw_Background(Black);
-								Draw_Menu ();
-						}
-				 }
+			case 2:
+				if(reset2 == 1){
+					screen_Clear();
+					draw_Menu2();
+					draw_Arrow2(2);
+					reset2 = 0;
+				}
+				keys = IORD_8DIRECT(keyAddress,0);
+				switches = IORD_8DIRECT(switchAddress,0);
+				if (keys == Key3 && arrow == first){
+					clear_Arrows2();
+					draw_Arrow2(3);
+					arrow = second;
+				}
+				if (keys == Key2 && arrow == second){
+					clear_Arrows2();
+					draw_Arrow2(2);
+					arrow = first;
+				}
+				if (arrow == first && switches == Switch0){
+					state = 4;
+					reset2 = 1;
+				}
+				if (arrow == second && switches == Switch0){
+					state = 5;
+					reset2 = 1;
+				}
+				if (keys == Key1){
+					state = 1;
+					reset2 = 1;
+				}
 
-				 sdcard_fclose(handle);
-				 arrow_number = 1;
-			 }
+			break;
 
-		 for (i=0; i<200000;i++);
-		         *switchAddress = 0;
+			case 3:
+				if(reset3 == 1){
+					screen_Clear();
+					draw_Menu3();
+					draw_Arrow2(2);
+					reset3 = 0;
+				}
+				keys = IORD_8DIRECT(keyAddress,0);
+				switches = IORD_8DIRECT(switchAddress,0);
+				if (keys == Key3 && arrow == first){
+					clear_Arrows2();
+					draw_Arrow2(3);
+					arrow = second;
+				}
+				if (keys == Key2 && arrow == second){
+					clear_Arrows2();
+					draw_Arrow2(2);
+					arrow = first;
+				}
+				if (arrow == first && switches == Switch0){
+					state = 6;
+					reset3 = 1;
+				}
+				if (arrow == second && switches == Switch0){
+					state = 7;
+					reset3 = 1;
+				}
+				if (keys == Key1){
+					state = 1;
+					reset3 = 1;
+				}
 
+			break;
 
-	}
+			case 4:
+				if(reset4_1 == 1){
+					screen_Clear();
+					draw_Background(Blue);
+					draw_Axis(Yellow);
+					handle = alt_up_sd_card_fopen("ab/hi.txt",false);
+					reset4_1 = 0;
+				}
+				keys = IORD_8DIRECT(keyAddress,0);
+				sdcard_ReadFile(temp, handle);
+				display_Data(temp);
+				if(keys == Key1){
+					if(reset4_2 == 1){
+						sdcard_fclose(handle);
+						reset4_2 = 0;
+					}
+					state = 2;
+					reset4_1 = 1;
+					reset4_2 = 1;
+				}
 
+			break;
 
+			case 5:
+				if(reset5_1 == 1){
+					screen_Clear();
+					draw_Background(Blue);
+					draw_Axis(Yellow);
+					handle = alt_up_sd_card_fopen("ab/hi.txt",false);
+					reset5_1 = 0;
+				}
+				keys = IORD_8DIRECT(keyAddress,0);
+				sdcard_ReadFile(temp, handle);
+				//***************************FFT calculation goes to here
+				display_Data(temp);
+				if(keys == Key1){
+					if(reset5_2 == 1){
+						sdcard_fclose(handle);
+						reset5_2 = 0;
+					}
+					state = 2;
+					reset5_1 = 1;
+					reset5_2 = 1;
+				}
 
+			break;
 
-	/*
-	int sw;
-	while(1){
-	sw = IORD_ALTERA_AVALON_PIO_DATA(keyAddress) & 0x07;
-	printf("%d",sw);
-		if(sw == 0)
-		{
-			 IOWR_ALTERA_AVALON_PIO_DATA(ledAddress,0);
+			case 6:
+				if(reset6 == 1){
+					screen_Clear();
+					draw_Background(Blue);
+					draw_Axis(Yellow);
+					reset6 = 0;
+				}
+				keys = IORD_8DIRECT(keyAddress,0);
+				audio_Readtoscreen (buffer_16, temp);
+				printArray(temp);
+				display_Data(temp);
+				if(keys == Key1){
+					state = 3;
+					reset6 = 1;
+				}
+
+				break;
+
+			case 7:
+				if(reset7 == 1){
+					screen_Clear();
+					draw_Background(Blue);
+					draw_Axis(Yellow);
+					reset7 = 0;
+				}
+				keys = IORD_8DIRECT(keyAddress,0);
+				audio_Readtoscreen (buffer_16, temp); // change to audio_Readtobuffer, depends on how large the array that FFT takes
+				//*************FFT calculation goes here
+				display_Data(temp);
+				if(keys == Key1){
+					state = 3;
+					reset7 = 1;
+					}
+
+				break;
+
 		}
 
 	}
-	*/
+
   return 0;
 }
 
-int random_double() {
-		int x = rand() % 255 + 1; //1~255
-		return x;
-}
+
+
