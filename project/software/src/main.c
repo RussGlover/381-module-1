@@ -140,6 +140,9 @@ int main()
 					state = 2;
 					reset4_1 = 1;
 					reset4_2 = 1;
+					for (w=0; w<=15;w++){
+						pre_height[w] = 0;
+					}
 				}
 
 			break;
