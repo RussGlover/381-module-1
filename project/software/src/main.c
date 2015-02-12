@@ -2,7 +2,7 @@
  * tests.c
  *
  *  Created on: 2015-01-28
- *      Author: Tao Liu
+ *      Author: Tao Liu  & Aaron Cui
  */
 
 
@@ -34,13 +34,14 @@ int main()
 		//Set trigger flags for switch0 and key1 so the input will not be read repeatedly
 		switchtrigger = switch0trigger (switchstate, switches);
 		switchstate = switch0state (switchstate, switches);
-
-		if (keys == Key1 && keystate == 0){
-			keytrigger = 1;
-			keystate = 1;
-		}
-		if (keys == 7 && keystate == 1 )
-			keystate = 0;
+		keytrigger = key1trigger (keystate, keys);
+		keystate = key1state (keystate, keys);
+		//if (keys == Key1 && keystate == 0){
+		//	keytrigger = 1;
+		//	keystate = 1;
+		//}
+		//if (keys == 7 && keystate == 1 )
+		//	keystate = 0;
 		//Counters for delays and redrawn backgrounds
 		//A 2 second timer
 		if (counter == 1){

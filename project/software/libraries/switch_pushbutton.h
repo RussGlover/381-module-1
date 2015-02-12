@@ -2,7 +2,7 @@
  * switch_pushbutton.h
  *
  *  Created on: 2015-02-10
- *      Author: Allen
+ *      Author: Allen & Aaron
  */
 
 #ifndef SWITCH_PUSHBUTTON_H_
@@ -27,5 +27,8 @@ char switches_Detect();
 char keys_Detect();
 bool switch0trigger (bool switchstate, char switches);
 bool switch0state (bool switchstate, char switches);
+bool key1trigger (bool keystate, char keys);
+bool key1state (bool keystate, char keys);
+
 
 #endif /* SWITCH_PUSHBUTTON_H_ */
