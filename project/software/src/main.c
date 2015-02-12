@@ -36,12 +36,7 @@ int main()
 		switchstate = switch0state (switchstate, switches);
 		keytrigger = key1trigger (keystate, keys);
 		keystate = key1state (keystate, keys);
-		//if (keys == Key1 && keystate == 0){
-		//	keytrigger = 1;
-		//	keystate = 1;
-		//}
-		//if (keys == 7 && keystate == 1 )
-		//	keystate = 0;
+
 		//Counters for delays and redrawn backgrounds
 		//A 2 second timer
 		if (counter == 1){
