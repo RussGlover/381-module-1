@@ -7,6 +7,7 @@
 //#include <../audio_core_test/Definitions.h>
 #include <../audio_core_test/Screen.h>
 short int pre_height [16] ;
+short int pre_height2 [8] ;
 
 //screen
 alt_up_pixel_buffer_dma_dev *pixel_buffer;
@@ -58,6 +59,18 @@ void draw_Background(colour) {
 		IOWR_32DIRECT(drawer_base,4,0); // Set y1
 		IOWR_32DIRECT(drawer_base,8,320); // Set x2
 		IOWR_32DIRECT(drawer_base,12,240); // Set y2
+		IOWR_32DIRECT(drawer_base,16,colour);  // Set colour
+		IOWR_32DIRECT(drawer_base,20,1);  // Start drawing
+		while(IORD_32DIRECT(drawer_base,20)==0); // wait until done
+}
+/*
+ * Take the colour parameter and draw the top half the backgound to that colour
+ */
+void draw_Background2(colour) {
+	    IOWR_32DIRECT(drawer_base,0,0); // Set x1
+		IOWR_32DIRECT(drawer_base,4,0); // Set y1
+		IOWR_32DIRECT(drawer_base,8,320); // Set x2
+		IOWR_32DIRECT(drawer_base,12,120); // Set y2
 		IOWR_32DIRECT(drawer_base,16,colour);  // Set colour
 		IOWR_32DIRECT(drawer_base,20,1);  // Start drawing
 		while(IORD_32DIRECT(drawer_base,20)==0); // wait until done
@@ -243,6 +256,73 @@ void draw_Axis (int colour) {
 	}
 }
 
+/*
+ * draw the axis for FFT histogram
+ */
+void draw_Axis2 (int colour) {
+	alt_up_char_buffer_string(char_buffer, "0", 9, 53);//x-axis
+	alt_up_char_buffer_string(char_buffer, "1", 17, 54);
+	alt_up_char_buffer_string(char_buffer, "2", 25, 54);
+	alt_up_char_buffer_string(char_buffer, "3", 32, 54);
+	alt_up_char_buffer_string(char_buffer, "4", 40, 54);
+	alt_up_char_buffer_string(char_buffer, "5", 47, 54);
+	alt_up_char_buffer_string(char_buffer, "6", 54, 54);
+	alt_up_char_buffer_string(char_buffer, "7", 62, 54);
+	alt_up_char_buffer_string(char_buffer, "8", 70, 54);
+
+	alt_up_char_buffer_string(char_buffer, "25", 8, 47);
+	alt_up_char_buffer_string(char_buffer, "50", 8, 42);
+	alt_up_char_buffer_string(char_buffer, "75", 8, 37);
+	alt_up_char_buffer_string(char_buffer, "100", 7, 32);
+	alt_up_char_buffer_string(char_buffer, "125", 7, 27);
+	alt_up_char_buffer_string(char_buffer, "150", 7, 22);
+	alt_up_char_buffer_string(char_buffer, "175", 7, 17);
+	alt_up_char_buffer_string(char_buffer, "200", 7, 12);
+	alt_up_char_buffer_string(char_buffer, "225", 7, 7);
+	alt_up_char_buffer_string(char_buffer, "250", 7, 2);
+
+
+
+
+	IOWR_32DIRECT(drawer_base,0,40); //y-axis
+	IOWR_32DIRECT(drawer_base,4,0);
+	IOWR_32DIRECT(drawer_base,8,41);
+	IOWR_32DIRECT(drawer_base,12,210);
+	IOWR_32DIRECT(drawer_base,16,colour);
+	IOWR_32DIRECT(drawer_base,20,1);
+	while(IORD_32DIRECT(drawer_base,20)==0);
+
+	int h = 0;
+	for (h = 9; h<=205; h=h+40){ //points on y
+		IOWR_32DIRECT(drawer_base,0,39);
+		IOWR_32DIRECT(drawer_base,4,h);
+		IOWR_32DIRECT(drawer_base,8,40);
+		IOWR_32DIRECT(drawer_base,12,h+1);
+		IOWR_32DIRECT(drawer_base,16,colour);
+		IOWR_32DIRECT(drawer_base,20,1);
+		while(IORD_32DIRECT(drawer_base,20)==0);
+	}
+
+	IOWR_32DIRECT(drawer_base,0,40);//x-axis
+	IOWR_32DIRECT(drawer_base,4,211);
+	IOWR_32DIRECT(drawer_base,8,320);
+	IOWR_32DIRECT(drawer_base,12,210);
+	IOWR_32DIRECT(drawer_base,16,colour);
+	IOWR_32DIRECT(drawer_base,20,1);
+	while(IORD_32DIRECT(drawer_base,20)==0);
+
+	int i =0 ;
+	for (i=70; i<320; i=i+30){ //points on x
+		IOWR_32DIRECT(drawer_base,0,i);
+		IOWR_32DIRECT(drawer_base,4,212);
+		IOWR_32DIRECT(drawer_base,8,i+1);
+		IOWR_32DIRECT(drawer_base,12,211);
+		IOWR_32DIRECT(drawer_base,16,colour);
+		IOWR_32DIRECT(drawer_base,20,1);
+		while(IORD_32DIRECT(drawer_base,20)==0);
+	}
+}
+
 
 /*
  * Take the input of 16 elements array
@@ -286,9 +366,54 @@ void draw_Bars (int bar_num,short int height,int colour,short int pre_height[]){
 
 }
 
+void display_Data2(short int data[],short int pre_height2[]){
+
+	int i;
+	short int height;
+	double scale=0.8;
+	for (i=0; i<=7;i++){
+		height=(short int)(data[i]*scale);
+		draw_Bars2(i,height,Green,pre_height2); //change the colour
+		pre_height2[i] = height;
+	}
+}
+
+/*
+ * draw single bar for FFT
+ */
+void draw_Bars2 (int bar_num,short int height,int colour,short int pre_height2[]){ //x indicate the number of the bar, which is 0,1,2,3,etc    height is selected from 0-209
+	int n = 42+30*bar_num;
+	if (pre_height2[bar_num] < height){
+		IOWR_32DIRECT(drawer_base,0,n);
+		IOWR_32DIRECT(drawer_base,4,209 - pre_height2[bar_num]);
+		IOWR_32DIRECT(drawer_base,8,n+28);
+		IOWR_32DIRECT(drawer_base,12,209 - height);
+		IOWR_32DIRECT(drawer_base,16,colour);
+		IOWR_32DIRECT(drawer_base,20,1);
+		while(IORD_32DIRECT(drawer_base,20)==0);
+	}
+	else {
+		IOWR_32DIRECT(drawer_base,0,n);
+		IOWR_32DIRECT(drawer_base,4,209-height);
+		IOWR_32DIRECT(drawer_base,8,n+28);
+		IOWR_32DIRECT(drawer_base,12,209-pre_height2[bar_num]);
+		IOWR_32DIRECT(drawer_base,16,Blue);     //cover with background colour
+		IOWR_32DIRECT(drawer_base,20,1);
+		while(IORD_32DIRECT(drawer_base,20)==0);
+	}
+
+}
 /*
  * draw error of cursor moving up
  */
 void draw_Errormoveup(void) {
 	alt_up_char_buffer_string(char_buffer, "***Error!!! Moving up***", 30, 20);
+}
+
+/*
+ * draw Text onto screen
+ */
+
+void draw_Text(char array[]) {
+	alt_up_char_buffer_string(char_buffer, array, 20, 57);
 }

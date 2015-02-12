@@ -162,6 +162,44 @@ void sdcard_ReadFile(short int read_data[], short int file_handle)
 		}
 	}
 }
+
+
+
+
+/*
+ * Reads file into a 8 elements short int array
+ */
+void sdcard_ReadFile2(short int read_data[], short int file_handle)
+{
+	short int byte = 0;
+	short int val=0;
+	int size = 0;
+	char string[10];
+	int string_index;
+	while(byte !=-1){
+		string_index = 0;
+		while(1){
+			byte = sdcard_ReadByte(file_handle);
+			if(byte <= -1){
+				return;
+			}
+			else if(byte >=47 &&byte <= 58){
+				string[string_index] =(char)(((int)'0')+byte-48);
+				string_index ++;
+			}
+			else {
+				string[string_index]='\0';
+				break;
+			}
+		}
+		val = atoi(string);
+		read_data[size]=val;
+		size++;
+		if (size ==8){
+			break;
+		}
+	}
+}
 	/*
 	short int byte = 0;
 	int size = 0;

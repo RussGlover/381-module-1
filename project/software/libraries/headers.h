@@ -13,5 +13,5 @@
 #include <../audio_core_test/Screen.h>
 #include <../audio_core_test/Audio.h>
 #include <../audio_core_test/switch_pushbutton.h>
-
+#include <../audio_core_test/Lcd.h>
 #endif /* HEADERS_H_ */

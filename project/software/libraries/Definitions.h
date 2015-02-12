@@ -14,13 +14,21 @@ char keys;
 char switches;
 int arrow = 2;
 short int temp[16];
+short int temp2[8];
+unsigned int temp3[1024];
 int i;
+int counter = 0;
+int timer = 1;
+int timer2 = 1;
+int counter2 = 0;
 
 //Audio
 unsigned buffer_16[16];
 
 //Video
-short int pre_height[16] ;
+short int pre_height[16];
+short int pre_height2[8];
+char text[] = "The classification of the sound is: ";
 
 
 //libraries
@@ -30,6 +38,7 @@ short int pre_height[16] ;
 #include <altera_avalon_pio_regs.h>
 #include <altera_up_avalon_audio.h>
 #include <altera_up_avalon_audio_and_video_config.h>
+#include "altera_up_avalon_character_lcd.h"
 
 #include <io.h>
 #include <stdlib.h>
@@ -105,7 +114,12 @@ int third = 4;
 //SD card
 int handle = 0;
 
-
+//lcd
+char firstline[] = " Current State:\0";
+char case1[] = "   User Menu      \0";
+char case2[] ="  SD Card Menu     \0";
+char case3[] = "   Audio Menu     \0";
+char drawing[] = "Data Displaying    \0";
 
 
 

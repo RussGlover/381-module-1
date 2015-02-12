@@ -95,9 +95,10 @@ void audio_Readtoscreen (unsigned int buffer[], short int temp[]) {
 		{
 			// read audio buffer
 			alt_up_audio_read_fifo (audio_dev, &(right), 1, ALT_UP_AUDIO_RIGHT);
+			//printf("%u \n",right);
 			if(right>0 && right < 5000)
 			{
-				printf("%u \t",right);
+				//printf("%u \t",right);
 				buffer[count] = right;
 				count++;
 			}

@@ -33,7 +33,7 @@ void sdcard_ListFiles(char *directory);
 short int sdcard_fopen(char *name, bool create_new_if_not_exist);
 void sdcard_fclose(short int file_handle);
 short int sdcard_getFattributes(short int file_handle);
-
+void sdcard_ReadFile2(short int read_data[], short int file_handle);
 void printArray(short int a[]);
 typedef struct
 {

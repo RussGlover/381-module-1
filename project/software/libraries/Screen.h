@@ -46,13 +46,18 @@ void draw_Menu1 (void) ;
 void draw_Arrow (int y);
 void draw_Arrow2 (int y);
 void draw_Bars (int x,short int height,int colour,short int pre_height[]);
+void draw_Bars2 (int x,short int height,int colour,short int pre_height[]);
 void draw_Axis (int colour);
+void draw_Axis2 (int colour);
 void draw_Background(int colour);
+void draw_Background2(int colour);
 void display_Data (short int data[]);
+void display_Data2 (short int data[], short int pre_height2[]);
 void char_Clearonly(void);
 void draw_Menu2(void);
 void draw_Menu3(void);
 void clear_Arrows(void);
 void clear_Arrows2(void);
 void draw_Errormoveup(void);
+void draw_Text(char array[]);
 #endif /* SCREEN_H_ */
