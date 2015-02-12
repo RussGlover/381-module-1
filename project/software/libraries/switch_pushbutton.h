@@ -23,5 +23,9 @@
 #include <stdbool.h>
 #include <sys/alt_alarm.h>
 
-void switchpushbutton_Detect(char keys, char switches);
+char switches_Detect();
+char keys_Detect();
+bool switch0trigger (bool switchstate, char switches);
+bool switch0state (bool switchstate, char switches);
+
 #endif /* SWITCH_PUSHBUTTON_H_ */

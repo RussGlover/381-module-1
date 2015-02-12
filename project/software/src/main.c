@@ -5,6 +5,7 @@
  *      Author: Tao Liu
  */
 
+
 #include <../audio_core_test/headers.h>
 int main()
 {
@@ -14,6 +15,8 @@ int main()
 	sdcard_Init();
 	audio_Init ();
 	lcd_Init();
+
+	tickpersec = alt_ticks_per_second();
 
 	lcd_Printfirst(firstline);
 	int w=0;
@@ -26,35 +29,38 @@ int main()
 
 	while (1){
 
-		keys = IORD_8DIRECT(keyAddress,0);
-		switches = IORD_8DIRECT(switchAddress,0);
-
-		if (switchstate == 0 && switches == Switch0 ){
-			switchstate = 1;
-			switchtrigger = 1;
-		}
-		if (switchstate == 1 && switches == 0)
-			switchstate = 0;
+		keys = keys_Detect();
+		switches = switches_Detect();
+		//Set trigger flags for switch0 and key1 so the input will not be read repeatedly
+		switchtrigger = switch0trigger (switchstate, switches);
+		switchstate = switch0state (switchstate, switches);
 
 		if (keys == Key1 && keystate == 0){
 			keytrigger = 1;
 			keystate = 1;
 		}
-
 		if (keys == 7 && keystate == 1 )
 			keystate = 0;
-
-		if (counter == 100000){
+		//Counters for delays and redrawn backgrounds
+		//A 2 second timer
+		if (counter == 1){
 				counter = 0;
 				timer = 1;
 			}else{
-				counter++;
+				ticksincereset = alt_nticks();
+				if ((ticksincereset % (2*tickpersec)) == 0){
+					counter++;
+				}
 			}
-		if (counter2 == 100){
+		//A 1 second timer
+		if (counter2 == 1){
 				counter2 = 0;
 				timer2 = 1;
 		}else{
-			counter2++;
+			ticksincereset = alt_nticks();
+			if ((ticksincereset % tickpersec) == 0){
+				counter2++;
+			}
 		}
 		switch(state) {
 			case 1:
@@ -307,11 +313,11 @@ int main()
 
 				//keys = IORD_8DIRECT(keyAddress,0);
 				//audio_Readtobuffer (temp3);
-				/*
-				for(w=0; w<=1023; w++){   // for testing values stored in the temp3
-						printf("%u \t", temp3[w]);
-				}
-				*/
+
+				//for(w=0; w<=1023; w++){   // for testing values stored in the temp3
+				//		printf("%u \t", temp3[w]);
+				//}
+
 				// change to audio_Readtobuffer, depends on how large the array that FFT takes
 				//temp3 is 1024 elements unsigned int
 				//temp2 takes 8 elements short int

@@ -11,11 +11,18 @@
 //universal variables
 int state = 1;
 char keys;
+bool keytrigger = 0;
+bool keystate = 0;
 char switches;
+bool switchstate = 0;
+bool switchtrigger = 0;
+int ticksincereset = 0;
+int tickpersec;
 int arrow = 2;
 short int temp[16];
 short int temp2[8];
 unsigned int temp3[1024];
+short int temp4[1024];
 int i;
 int counter = 0;
 int timer = 1;
