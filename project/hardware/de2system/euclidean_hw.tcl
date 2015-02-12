@@ -111,4 +111,3 @@ set_interface_property clock PORT_NAME_MAP ""
 set_interface_property clock SVD_ADDRESS_GROUP ""
 
 add_interface_port clock clock clk Input 1
-
