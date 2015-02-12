@@ -25,6 +25,25 @@ int main()
 		}
 
 	while (1){
+
+		keys = IORD_8DIRECT(keyAddress,0);
+		switches = IORD_8DIRECT(switchAddress,0);
+
+		if (switchstate == 0 && switches == Switch0 ){
+			switchstate = 1;
+			switchtrigger = 1;
+		}
+		if (switchstate == 1 && switches == 0)
+			switchstate = 0;
+
+		if (keys == Key1 && keystate == 0){
+			keytrigger = 1;
+			keystate = 1;
+		}
+
+		if (keys == 7 && keystate == 1 )
+			keystate = 0;
+
 		if (counter == 100000){
 				counter = 0;
 				timer = 1;
@@ -51,8 +70,8 @@ int main()
 					draw_Arrow(arrow);
 					timer = 0;
 				}
-				keys = IORD_8DIRECT(keyAddress,0);
-				switches = IORD_8DIRECT(switchAddress,0);
+				//keys = IORD_8DIRECT(keyAddress,0);
+				//switches = IORD_8DIRECT(switchAddress,0);
 				if (keys == Key3 && arrow == first){
 					clear_Arrows();
 					draw_Arrow(3);
@@ -63,17 +82,17 @@ int main()
 					draw_Arrow(2);
 					arrow = first;
 				}
-				if (arrow == first && switches == Switch0){
+				if (arrow == first && switchtrigger == 1){
 					state = 2;
 					reset1 = 1;
 					arrow = 2;
-					for (i=0; i<200000;i++);
+					switchtrigger = 0;
 				}
-				if (arrow == second && switches == Switch0){
+				if (arrow == second && switchtrigger == 1){
 					state = 3;
 					reset1 = 1;
 					arrow = 2;
-					for (i=0; i<200000;i++);
+					switchtrigger = 0;
 				}
 
 			break;
@@ -91,8 +110,8 @@ int main()
 					draw_Arrow2(arrow);
 					timer = 0;
 				}
-				keys = IORD_8DIRECT(keyAddress,0);
-				switches = IORD_8DIRECT(switchAddress,0);
+				//keys = IORD_8DIRECT(keyAddress,0);
+				//switches = IORD_8DIRECT(switchAddress,0);
 				if (keys == Key3 && arrow == first){
 					clear_Arrows2();
 					draw_Arrow2(3);
@@ -103,16 +122,19 @@ int main()
 					draw_Arrow2(2);
 					arrow = first;
 				}
-				if (arrow == first && switches == Switch0){
+				if (arrow == first && switchtrigger == 1){
 					state = 4;
+					switchtrigger = 0;
 					reset2 = 1;
 				}
-				if (arrow == second && switches == Switch0){
+				if (arrow == second && switchtrigger == 1){
 					state = 5;
+					switchtrigger = 0;
 					reset2 = 1;
 				}
-				if (keys == Key1){
+				if (keytrigger == 1){
 					state = 1;
+					keytrigger = 0;
 					reset2 = 1;
 					arrow = 2;
 				}
@@ -132,8 +154,8 @@ int main()
 					draw_Arrow2(arrow);
 					timer = 0;
 				}
-				keys = IORD_8DIRECT(keyAddress,0);
-				switches = IORD_8DIRECT(switchAddress,0);
+				//keys = IORD_8DIRECT(keyAddress,0);
+				//switches = IORD_8DIRECT(switchAddress,0);
 				if (keys == Key3 && arrow == first){
 					clear_Arrows2();
 					draw_Arrow2(3);
@@ -144,16 +166,19 @@ int main()
 					draw_Arrow2(2);
 					arrow = first;
 				}
-				if (arrow == first && switches == Switch0){
+				if (arrow == first && switchtrigger == 1){
 					state = 6;
+					switchtrigger = 0;
 					reset3 = 1;
 				}
-				if (arrow == second && switches == Switch0){
+				if (arrow == second && switchtrigger == 1){
 					state = 7;
+					switchtrigger = 0;
 					reset3 = 1;
 				}
-				if (keys == Key1){
+				if (keytrigger == 1){
 					state = 1;
+					keytrigger = 0;
 					reset3 = 1;
 					arrow = 2;
 				}
@@ -176,16 +201,17 @@ int main()
 					timer2 = 0;
 				}
 
-				keys = IORD_8DIRECT(keyAddress,0);
+				//keys = IORD_8DIRECT(keyAddress,0);
 				sdcard_ReadFile(temp, handle);
 				display_Data(temp);
-				if(keys == Key1){
+				if(keytrigger == 1){
 					if(reset4_2 == 1){
 						sdcard_fclose(handle);
 						reset4_2 = 0;
 					}
 					state = 2;
 					arrow = 2;
+					keytrigger = 0;
 					reset4_1 = 1;
 					reset4_2 = 1;
 					for (w=0; w<=15;w++){
@@ -212,17 +238,18 @@ int main()
 					timer2 = 0;
 				}
 
-				keys = IORD_8DIRECT(keyAddress,0);
+				//keys = IORD_8DIRECT(keyAddress,0);
 				sdcard_ReadFile2(temp2, handle);
 				//***************************FFT calculation goes to here
 				display_Data2(temp2,pre_height2);
-				if(keys == Key1){
+				if(keytrigger == 1){
 					if(reset5_2 == 1){
 						sdcard_fclose(handle);
 						reset5_2 = 0;
 					}
 					state = 2;
 					arrow = 2;
+					keytrigger = 0;
 					reset5_1 = 1;
 					reset5_2 = 1;
 					for (w=0; w<=7;w++){
@@ -247,12 +274,13 @@ int main()
 					timer2 = 0;
 				}
 
-				keys = IORD_8DIRECT(keyAddress,0);
+				//keys = IORD_8DIRECT(keyAddress,0);
 				audio_Readtoscreen (buffer_16, temp);
 				display_Data(temp);
-				if(keys == Key1){
+				if(keytrigger == 1){
 					state = 3;
 					arrow = 2;
+					keytrigger = 0;
 					reset6 = 1;
 					for (w=0; w<=15;w++){
 						pre_height[w] = 0;
@@ -277,7 +305,7 @@ int main()
 					timer2 = 0;
 				}
 
-				keys = IORD_8DIRECT(keyAddress,0);
+				//keys = IORD_8DIRECT(keyAddress,0);
 				//audio_Readtobuffer (temp3);
 				/*
 				for(w=0; w<=1023; w++){   // for testing values stored in the temp3
@@ -289,9 +317,10 @@ int main()
 				//temp2 takes 8 elements short int
 				//*************FFT calculation goes here
 				//display_Data2(temp2,pre_height2);
-				if(keys == Key1){
+				if(keytrigger == 1){
 					state = 3;
 					arrow = 2;
+					keytrigger = 0;
 					reset7 = 1;
 					for (w=0; w<=7;w++){
 						pre_height2[w] = 0;
