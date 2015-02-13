@@ -11,16 +11,26 @@
 //universal variables
 int state = 1;
 char keys;
+bool keystate = 0;
+bool keytrigger = 0;
 char switches;
+bool switchstate = 0;
+bool switchtrigger = 0;
 int arrow = 2;
 short int temp[16];
 short int temp2[8];
 unsigned int temp3[1024];
-int i;
+unsigned int temp4[1024];
+short int results[1024];
+signed short max = 0;
+double scaling_factor = 0;
+int i, j, k, index;
 int counter = 0;
 int timer = 1;
 int timer2 = 1;
 int counter2 = 0;
+short int classical[] = {10000, 4500, 2100, 1800, 1000, 600, 159, 145};
+short int pop[] = {10000, 6600, 3500, 3000, 2200, 1500, 614, 394};
 
 //Audio
 unsigned buffer_16[16];
@@ -29,6 +39,8 @@ unsigned buffer_16[16];
 short int pre_height[16];
 short int pre_height2[8];
 char text[] = "The classification of the sound is: ";
+char classical_text[] = "The classification of the sound is: Classical";
+char pop_text[] = "The classification of the sound is: Pop";
 
 
 //libraries
@@ -51,9 +63,10 @@ char text[] = "The classification of the sound is: ";
 #include <sys/alt_alarm.h>
 
 
-#define switchAddress   (volatile char*)   0x00004870
-#define ledAddress       (volatile char*)   0x00004860
-#define keyAddress (volatile char*)   0x00004840
+#define switchAddress   (volatile char*)   0x000048d0
+#define ledAddress       (volatile char*)   0x000048a0
+#define keyAddress (volatile char*)   0x000048b0
+#define fft_core_base (volatile int *) 0x4820
 
 //screen
 //alt_up_pixel_buffer_dma_dev *pixel_buffer;
@@ -61,7 +74,7 @@ char text[] = "The classification of the sound is: ";
 
 #define Screen_Height   240;
 #define Screen_Width    320;
-#define drawer_base (volatile int *) 0x5000
+#define drawer_base (volatile int *) 0x4860
 
 //colours
 #define Black           0x0000      /*   0,   0,   0 */

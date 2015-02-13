@@ -10,6 +10,6 @@
 
 void lcd_Init(void);
 void lcd_Printfirst(char first[]);
-void lcd_Pirntsecond(char second[]);
+void lcd_Printsecond(char second[]);
 
 #endif /* LCD_H_ */

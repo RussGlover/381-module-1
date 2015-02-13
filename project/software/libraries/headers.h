@@ -8,10 +8,11 @@
 #ifndef HEADERS_H_
 #define HEADERS_H_
 
-#include <../audio_core_test/SDcard.h>
-#include <../audio_core_test/Definitions.h>
-#include <../audio_core_test/Screen.h>
-#include <../audio_core_test/Audio.h>
-#include <../audio_core_test/switch_pushbutton.h>
-#include <../audio_core_test/Lcd.h>
+#include "SDcard.h"
+#include "Definitions.h"
+#include "Screen.h"
+#include "Audio.h"
+#include "switch_pushbutton.h"
+#include "Lcd.h"
+#include "fftcore.h"
 #endif /* HEADERS_H_ */

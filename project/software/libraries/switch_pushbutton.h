@@ -9,9 +9,9 @@
 #define SWITCH_PUSHBUTTON_H_
 
 
-#define switchAddress   (volatile char*)   0x00004870
-#define ledAddress       (volatile char*)   0x00004860
-#define keyAddress (volatile char*)   0x00004840
+#define switchAddress   (volatile char*)   0x000048d0
+#define ledAddress       (volatile char*)   0x000048a0
+#define keyAddress (volatile char*)   0x000048b0
 #include <altera_avalon_pio_regs.h>
 #include <io.h>
 #include <stdlib.h>

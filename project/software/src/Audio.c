@@ -5,7 +5,7 @@
  *      Author: Tao Liu
  */
 //#include <../audio_core_test/Definitions.h>
-#include <../audio_core_test/Audio.h>
+#include "Audio.h"
 
 
 alt_up_audio_dev * audio_dev;
@@ -15,7 +15,7 @@ alt_up_audio_dev * audio_dev;
  * printf to the console if it succeeds
  */
 void av_config_setup(void) {
-	alt_up_av_config_dev * av_config = alt_up_av_config_open_dev("/dev/audio_and_video_config_0");
+	alt_up_av_config_dev * av_config = alt_up_av_config_open_dev("/dev/audio_and_video_config");
 	while (!alt_up_av_config_read_ready(av_config)) { }
 	printf("audio configuration success \n");
 }
@@ -25,7 +25,7 @@ void av_config_setup(void) {
  */
 void audio_Init(void) {
 	av_config_setup();
-	audio_dev = alt_up_audio_open_dev ("/dev/audio_0");
+	audio_dev = alt_up_audio_open_dev ("/dev/audio");
 	if ( audio_dev == NULL)
 		printf ("Error: could not open audio device \n");
 	else
@@ -71,7 +71,7 @@ void audio_Readtobuffer (unsigned int r_buf[]) {
 			alt_up_audio_read_fifo (audio_dev, &(temp), 1, ALT_UP_AUDIO_RIGHT);
 			if(temp>300 && temp < 60000)
 			{
-				printf("%u \t",temp);
+				//printf("%u \t",temp);
 				r_buf[count] = temp;
 				count++;
 			}

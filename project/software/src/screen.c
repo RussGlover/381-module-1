@@ -5,7 +5,7 @@
  *      Author: Tao Liu
  */
 //#include <../audio_core_test/Definitions.h>
-#include <../audio_core_test/Screen.h>
+#include "Screen.h"
 short int pre_height [16] ;
 short int pre_height2 [8] ;
 
@@ -91,7 +91,7 @@ void draw_Menu1 () {
  */
 void draw_Menu2(){
 	alt_up_char_buffer_string(char_buffer, "*Analyse the Data from SD card in Time Domain*", 20, 30);
-	alt_up_char_buffer_string(char_buffer, "*Analyse the Data from SD card in Frequency Domain*", 20, 35);
+	//alt_up_char_buffer_string(char_buffer, "*Analyse the Data from SD card in Frequency Domain*", 20, 35);
 }
 
 /*
@@ -261,25 +261,16 @@ void draw_Axis (int colour) {
  */
 void draw_Axis2 (int colour) {
 	alt_up_char_buffer_string(char_buffer, "0", 9, 53);//x-axis
-	alt_up_char_buffer_string(char_buffer, "1", 17, 54);
-	alt_up_char_buffer_string(char_buffer, "2", 25, 54);
-	alt_up_char_buffer_string(char_buffer, "3", 32, 54);
-	alt_up_char_buffer_string(char_buffer, "4", 40, 54);
-	alt_up_char_buffer_string(char_buffer, "5", 47, 54);
-	alt_up_char_buffer_string(char_buffer, "6", 54, 54);
-	alt_up_char_buffer_string(char_buffer, "7", 62, 54);
-	alt_up_char_buffer_string(char_buffer, "8", 70, 54);
+	alt_up_char_buffer_string(char_buffer, "2k", 17, 54);
+	alt_up_char_buffer_string(char_buffer, "4k", 24, 54);
+	alt_up_char_buffer_string(char_buffer, "6k", 32, 54);
+	alt_up_char_buffer_string(char_buffer, "8k", 39, 54);
+	alt_up_char_buffer_string(char_buffer, "10k", 47, 54);
+	alt_up_char_buffer_string(char_buffer, "12k", 54, 54);
+	alt_up_char_buffer_string(char_buffer, "14k", 62, 54);
+	alt_up_char_buffer_string(char_buffer, "16k", 69, 54);
 
-	alt_up_char_buffer_string(char_buffer, "25", 8, 47);
-	alt_up_char_buffer_string(char_buffer, "50", 8, 42);
-	alt_up_char_buffer_string(char_buffer, "75", 8, 37);
-	alt_up_char_buffer_string(char_buffer, "100", 7, 32);
-	alt_up_char_buffer_string(char_buffer, "125", 7, 27);
-	alt_up_char_buffer_string(char_buffer, "150", 7, 22);
-	alt_up_char_buffer_string(char_buffer, "175", 7, 17);
-	alt_up_char_buffer_string(char_buffer, "200", 7, 12);
-	alt_up_char_buffer_string(char_buffer, "225", 7, 7);
-	alt_up_char_buffer_string(char_buffer, "250", 7, 2);
+
 
 
 

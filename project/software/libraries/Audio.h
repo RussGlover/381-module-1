@@ -4,6 +4,8 @@
  *  Created on: 2015-02-08
  *      Author: Tao Liu
  */
+#ifndef AUDIO_H_
+#define AUDIO_H_
 
 #include <altera_up_avalon_audio.h>
 #include <altera_up_avalon_audio_and_video_config.h>
@@ -17,8 +19,7 @@
 #include <stdbool.h>
 #include <sys/alt_alarm.h>
 
-#ifndef AUDIO_H_
-#define AUDIO_H_
+
 
 // audio configuration setup
 void av_config_setup(void);

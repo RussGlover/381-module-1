@@ -6,8 +6,8 @@
  */
 
 
-#include <../audio_core_test/SDcard.h>
-#include <stdio.h>
+#include "SDcard.h"
+
 
 alt_up_sd_card_dev *device_reference = NULL;
 
